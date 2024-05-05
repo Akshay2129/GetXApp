@@ -32,7 +32,7 @@ class AbouPage extends StatelessWidget {
                         Text(item?.name ?? ""),
                         Text(item?.gender ?? ""),
                         Text(item!.phoneNumber.toString()),
-                        SizedBox(
+                       const SizedBox(
                           height: 20,
                         )
                       ],

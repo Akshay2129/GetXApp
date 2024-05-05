@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxproject/model/get_api_model.dart';
 import 'package:http/http.dart' as http;
@@ -8,11 +9,11 @@ class GetApiController extends GetxController {
   var items = Rx<GetApiModel>(GetApiModel());
   RxBool isLoading = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    getApi();
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   getApi();
+  // }
 
   Future<void> getApi() async {
     isLoading.value = true;
@@ -22,10 +23,16 @@ class GetApiController extends GetxController {
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      items.value =
-          GetApiModel.fromJson(data); 
+      items.value = GetApiModel.fromJson(data);
     }
-    isLoading.value =
-        false; 
+    isLoading.value = false;
+
+    Get.snackbar(
+      "Success",
+      "Data loaded successfully",
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
   }
 }

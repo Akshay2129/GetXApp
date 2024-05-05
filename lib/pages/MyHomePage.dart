@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxproject/controller/app_controller.dart';
+import 'package:getxproject/controller/get_api_controller.dart';
 import 'package:getxproject/pages/about_page.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -11,6 +12,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppCotroller appCotroller = Get.put(AppCotroller());
+    GetApiController getApiController = Get.put(GetApiController());
     return Scaffold(
       appBar: AppBar(
         title: const Text("GetX App", style: TextStyle(color: Colors.white)),
@@ -45,7 +47,8 @@ class MyHomePage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Get.offAll(
+                getApiController.getApi();
+                Get.off(
                   const AbouPage(),
                 );
               },
