@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getxproject/pages/MyHomePage.dart';
+import 'package:getxproject/controller/get_api_controller.dart';
+import 'package:getxproject/model/get_api_model.dart';
 
 class AbouPage extends StatelessWidget {
-  const AbouPage({super.key});
+  const AbouPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final GetApiController getApiController = Get.put(GetApiController());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -15,19 +17,29 @@ class AbouPage extends StatelessWidget {
         ),
         backgroundColor: Colors.blue,
       ),
-      body: Column(
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Get.offAll(
-                  MyHomePage(),
-                );
-              },
-              child: Text("Go To Next Page"),
-            ),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Obx(
+          () => getApiController.isLoading.value
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: getApiController.items.value.data?.length,
+                  itemBuilder: (context, index) {
+                    Datum? item = getApiController.items.value.data?[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(item?.name ?? ""),
+                        Text(item?.gender ?? ""),
+                        Text(item!.phoneNumber.toString()),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }

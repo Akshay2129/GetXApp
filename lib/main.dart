@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getxproject/pages/MyHomePage.dart';
+import 'package:getxproject/pages/about_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
     
-      home:  MyHomePage()
+      home:  AbouPage()
     );
   }
 }
