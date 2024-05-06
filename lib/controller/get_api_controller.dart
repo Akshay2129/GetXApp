@@ -9,11 +9,11 @@ class GetApiController extends GetxController {
   var items = Rx<GetApiModel>(GetApiModel());
   RxBool isLoading = false.obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   getApi();
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    getApi();
+  }
 
   Future<void> getApi() async {
     isLoading.value = true;

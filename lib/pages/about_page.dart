@@ -31,7 +31,7 @@ class AbouPage extends StatelessWidget {
                       children: [
                         Text(item?.name ?? ""),
                         Text(item?.gender ?? ""),
-                        Text(item!.phoneNumber.toString()),
+                        Text(item?.phoneNumber.toString()??""),
                        const SizedBox(
                           height: 20,
                         )
