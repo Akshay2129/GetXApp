@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:getxproject/controller/send_otp_controller.dart';
 
@@ -7,7 +8,6 @@ class SendOtp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingController = TextEditingController();
     SendOtpController sendOtpController = Get.put(SendOtpController());
 
     return Scaffold(
@@ -20,7 +20,10 @@ class SendOtp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
-              controller: textEditingController,
+              controller: sendOtpController.phoneNumber,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(10),
+              ],
               decoration: const InputDecoration(
                 labelText: "Phone Number",
                 border: OutlineInputBorder(),
@@ -39,10 +42,10 @@ class SendOtp extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                sendOtpController.sendOtp(textEditingController.text);
+                sendOtpController.sendOtp(phonenumber: sendOtpController.phoneNumber.text,context: context);
               },
               child: Obx(() {
-                return sendOtpController.isLoading.value
+                return sendOtpController.isLoading
                     ? const CircularProgressIndicator()
                     : const Text("Send OTP");
               }),

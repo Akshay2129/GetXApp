@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class GetApiController extends GetxController {
   var items = Rx<GetApiModel>(GetApiModel());
   RxBool isLoading = false.obs;
-
+ 
   @override
   void onInit() {
     super.onInit();

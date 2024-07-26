@@ -1,57 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getxproject/pages/MyHomePage.dart';
-import 'package:http/http.dart' as http;
+import 'package:getxproject/apibase/apibase.dart';
+import 'package:getxproject/preferences/local_preferences.dart';
+import 'package:getxproject/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class SendOtpController extends GetxController {
-  RxBool isLoading = false.obs;
+  final _isLoading = false.obs;
+  final ApiBase _apiBase = ApiBase();
+  bool get isLoading => _isLoading.value;
+  final TextEditingController _phoneController =
+      TextEditingController(text: "");
 
-  Future<void> sendOtp(String? phoneNumber) async {
-    print("Sending OTP to $phoneNumber");
-    try {
-      isLoading.value = true;
+  TextEditingController get phoneNumber => _phoneController;
 
-      final response = await http.post(
-        Uri.parse(
-          "https://4r4iwhot12.execute-api.ap-south-1.amazonaws.com/auth/auth/sendOtp",
-        ),
-        headers: {'Content-Type': 'application/json'},
-        body: '{"phoneNumber": "$phoneNumber"}',
-      );
+  Future<void> sendOtp(
+      {String? phonenumber, required BuildContext context}) async {
+    LocalStorageUtils.savePhoneNumber(phonenumber ?? "default");
+    _isLoading.value = true;
+    var payload = {
+      'phoneNumber': phonenumber,
+    };
+    _apiBase.post(
+        "https://4r4iwhot12.execute-api.ap-south-1.amazonaws.com/auth/auth/sendOtp",
+        payload, (data) {
+      _isLoading.value = false;
+      verifyscreen(context);
+    }, (e) {
+      _isLoading.value = false;
+      print('Error: $e');
+    });
+  }
 
-      if (response.statusCode == 200) {
-        print("OTP sent successfully");
-        Get.snackbar(
-          "success",
-          " OTP sent successfully to existing user",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-        Get.off(MyHomePage());
-      } else {
-        print("Failed to send OTP. Status code: ${response.statusCode}");
-
-        Get.snackbar(
-          "Error",
-          "Failed to send OTP. Status code: ${response.statusCode}",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-    } catch (e) {
-      print("Exception occurred: $e");
-
-      Get.snackbar(
-        "Error",
-        "Exception occurred: $e",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
-    }
+  void verifyscreen(BuildContext context) {
+    GoRouter.of(context).go(Routes.verify);
   }
 }
